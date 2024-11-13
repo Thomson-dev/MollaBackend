@@ -75,6 +75,7 @@ export const signin = async (req, res, next) => {
       { id: validUser._id, isAdmin: validUser.isAdmin },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
+      
     );
   
     // Destructure the password out of the user object to exclude it from the response
