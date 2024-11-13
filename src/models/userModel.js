@@ -26,7 +26,7 @@ const customerSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true }  
 );
 
 const Customer = mongoose.model('Customer', customerSchema);

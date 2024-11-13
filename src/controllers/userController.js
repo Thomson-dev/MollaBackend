@@ -10,12 +10,12 @@ export const signup = async (req, res, next) => {
 
   // Check if any of the required fields are missing or empty
   if (
-    !username || // Check if username is not provided
-    !email || // Check if email is not provided
-    !password || // Check if password is not provided
-    username === "" || // Check if username is an empty st9ring
-    email === "" || // Check if email is an empty string
-    password === "" // Check if password is an empty string
+    !username || 
+    !email || 
+    !password || 
+    username === "" || 
+    email === "" || 
+    password === "" 
   ) {
     // If any field is missing or empty, call the errorHandler with a 400 status code and an error message
     next(errorHandler(400, "All fields are required"));
