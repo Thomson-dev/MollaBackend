@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import cors from "cors";
 import userRoute from "./routes/userRoute.js";
 import productRoute from "./routes/productRoute.js";
+import addressRoute from "./routes/addressRoute.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -24,8 +25,9 @@ app.get("/", (req, res) => {
 });
 
 // Use the user routes
-app.use('/api/user', userRoute);
-app.use('/api/product', productRoute );
+app.use("/api/user", userRoute);
+app.use("/api/product", productRoute);
+app.use("/api/address", addressRoute);
 
 // Start the server
 app.listen(8000, () => {

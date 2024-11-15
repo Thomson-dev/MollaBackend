@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const customerSchema = new mongoose.Schema(
   {
@@ -16,19 +16,55 @@ const customerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    addresses: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        mobileNo: {
+          type: String,
+          required: true,
+        },
+        houseNo: {
+          type: String,
+          required: true,
+        },
+        street: {
+          type: String,
+          required: true,
+        },
+        landmark: {
+          type: String,
+          required: false,
+        },
+        city: {
+          type: String,
+          required: true,
+        },
+        country: {
+          type: String,
+          required: true,
+        },
+        postalCode: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     profilePicture: {
       type: String,
       default:
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     },
     isAdmin: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: true }  
+  { timestamps: true }
 );
 
-const Customer = mongoose.model('Customer', customerSchema);
+const Customer = mongoose.model("Customer", customerSchema);
 
 export default Customer;
