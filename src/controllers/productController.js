@@ -8,6 +8,7 @@ import { errorHandler } from "../utils/error.js";
 export const getproducts = async (req, res, next) => {
     try {
       const product = await Product.find({}).sort({ createdAt: -1 });
+      
       const totalPosts = await Product.countDocuments();
   
       const now = new Date();
