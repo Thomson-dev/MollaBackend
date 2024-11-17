@@ -18,7 +18,7 @@ export const storeOrders = async (req, res, next) => {
 
   // Create an array of product objects from the cart items
   const products = cartItems.map((item) => ({
-    name: item?.title,
+    name: item?.name,
     quantity: item?.quantity,
     price: item?.price,
     image: item?.image,
@@ -46,7 +46,6 @@ export const storeOrders = async (req, res, next) => {
     next(errorHandler(500, "Error creating orders"));
   }
 };
-
 
 export const getOrders = async (req, res, next) => {
   const userId = req.params.userId;
