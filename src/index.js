@@ -38,16 +38,16 @@ app.listen(8000, () => {
 
 // Error-handling middleware function
 app.use((err, req, res, next) => {
-  // Get the status code from the error object, or default to 500 if not provided
+ 
   const statusCode = err.statusCode || 500;
 
-  // Get the message from the error object, or default to 'Internal Server Error' if not provided
+
   const message = err.message || "Internal Server Error";
 
-  // Send a JSON response with the status code and error message
+
   res.status(statusCode).json({
-    success: false, // Indicate that the request was not successful
-    statusCode, // Include the status code in the response
-    message, // Include the error message in the response
+    success: false, 
+    statusCode, 
+    message, 
   });
 });

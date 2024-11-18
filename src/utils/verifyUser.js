@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { errorHandler } from "./error.js"; // Import the errorHandler function from the error.js file
-import User from "../models/user.model.js"; // Adjust the path to where your User model is located
+import { errorHandler } from "./error.js"; 
+import User from "../models/userModel.js"; 
 
 // Export the verifyToken function so it can be used as middleware in other files
 export const verifyToken = async (req, res, next) => {
@@ -23,7 +23,7 @@ export const verifyToken = async (req, res, next) => {
         return next(errorHandler(401, "Unauthorized: User not found"));
       }
 
-      next(); // Proceed to the next middleware or route handler
+      next(); 
     } catch (err) {
       return next(errorHandler(401, "Unauthorized: Invalid token"));
     }
