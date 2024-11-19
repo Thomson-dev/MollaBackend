@@ -6,6 +6,7 @@ import userRoute from "./routes/userRoute.js";
 import productRoute from "./routes/productRoute.js";
 import addressRoute from "./routes/addressRoute.js";
 import orderRoute from './routes/orderRoutes.js'
+import { createPaymentIntent } from './controllers/stripeController.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoute);
 app.use("/api/product", productRoute);
 app.use("/api/address", addressRoute);
+app.post('/api/stripe/intents', createPaymentIntent);
 app.use("/api/orders", orderRoute);
 
 // Start the server
