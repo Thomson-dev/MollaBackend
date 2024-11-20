@@ -1,3 +1,4 @@
+import { get } from "mongoose";
 import Product from "../models/productModel.js";
 import { errorHandler } from "../utils/error.js";
 
@@ -29,6 +30,22 @@ export const getproducts = async (req, res, next) => {
     };
 
     res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getproduct = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const product = await Product.findById(id);
+
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      throw errorHandler(404, "Product not found");
+    }
   } catch (error) {
     next(error);
   }
@@ -108,10 +125,14 @@ export const updateProduct = async (req, res, next) => {
 
 export const deleteProduct = async (req, res, next) => {
   if (!req.user.isAdmin) {
-    return next(errorHandler(403, "You are not allowed to delete this product"));
+    return next(
+      errorHandler(403, "You are not allowed to delete this product")
+    );
   }
   try {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.productId);
+    const deletedProduct = await Product.findByIdAndDelete(
+      req.params.productId
+    );
 
     if (!deletedProduct) {
       return next(errorHandler(404, "Product not found"));
@@ -122,4 +143,4 @@ export const deleteProduct = async (req, res, next) => {
     console.error("Error deleting product", error);
     next(errorHandler(500, "Error deleting product"));
   }
-}
+};
