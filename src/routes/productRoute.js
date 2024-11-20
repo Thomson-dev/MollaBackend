@@ -15,6 +15,6 @@ router.post("/create", verifyToken, createProduct);
 
 router.put("/update/:productId", verifyToken, updateProduct);
 
-router.delete("/delete/:postId", verifyToken, deleteProduct);
+router.delete("/delete/:productId", verifyToken, deleteProduct);
 
 export default router;

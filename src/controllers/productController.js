@@ -50,7 +50,6 @@ export const createProduct = async (req, res, next) => {
       name,
       price,
       image,
-
       category,
       countInStock,
       description,
@@ -109,13 +108,18 @@ export const updateProduct = async (req, res, next) => {
 
 export const deleteProduct = async (req, res, next) => {
   if (!req.user.isAdmin) {
-    return next(errorHandler(403, "You are not allowed to delete this post"));
+    return next(errorHandler(403, "You are not allowed to delete this product"));
   }
   try {
-    const deletedPost = await Product.findByIdAndDelete(req.params.productId);
+    const deletedProduct = await Product.findByIdAndDelete(req.params.productId);
 
-    res.status(200).json("The post has been deleted");
+    if (!deletedProduct) {
+      return next(errorHandler(404, "Product not found"));
+    }
+
+    res.status(200).json({ message: "The product has been deleted" });
   } catch (error) {
-    next(error);
+    console.error("Error deleting product", error);
+    next(errorHandler(500, "Error deleting product"));
   }
-};
+}

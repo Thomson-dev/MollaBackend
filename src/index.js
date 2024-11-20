@@ -5,8 +5,8 @@ import cors from "cors";
 import userRoute from "./routes/userRoute.js";
 import productRoute from "./routes/productRoute.js";
 import addressRoute from "./routes/addressRoute.js";
-import orderRoute from './routes/orderRoutes.js'
-import { createPaymentIntent } from './controllers/stripeController.js';
+import orderRoute from "./routes/orderRoutes.js";
+import { createPaymentIntent } from "./controllers/stripeController.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoute);
 app.use("/api/product", productRoute);
 app.use("/api/address", addressRoute);
-app.post('/api/stripe/intents', createPaymentIntent);
+app.post("/api/stripe/intents", createPaymentIntent);
 app.use("/api/orders", orderRoute);
 
 // Start the server
@@ -40,16 +40,13 @@ app.listen(8000, () => {
 
 // Error-handling middleware function
 app.use((err, req, res, next) => {
- 
   const statusCode = err.statusCode || 500;
-
 
   const message = err.message || "Internal Server Error";
 
-
   res.status(statusCode).json({
-    success: false, 
-    statusCode, 
-    message, 
+    success: false,
+    statusCode,
+    message,
   });
 });
