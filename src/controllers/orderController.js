@@ -62,3 +62,34 @@ export const getOrders = async (req, res, next) => {
     res.status(500).json({ message: "Error" });
   }
 };
+
+
+export const getAllOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find({}).sort({ createdAt: -1 });
+
+    const totalOrders = await Order.countDocuments();
+
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthOrders = await Order.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    const response = {
+      orders,
+      totalOrders,
+      lastMonthOrders,
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("Error fetching orders", error);
+    next(errorHandler(500, "Error fetching orders"));
+  }
+};

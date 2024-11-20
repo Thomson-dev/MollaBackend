@@ -103,7 +103,6 @@ export const updateProduct = async (req, res, next) => {
           name,
           price,
           image,
-
           category,
           countInStock,
           description,
