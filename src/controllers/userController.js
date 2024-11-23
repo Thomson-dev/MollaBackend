@@ -88,3 +88,23 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
+
+export const getUserProfile = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error("Error retrieving the user profile", error);
+    next(errorHandler(500, "Error retrieving the user profile"));
+  }
+};
