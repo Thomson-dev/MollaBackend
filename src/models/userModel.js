@@ -61,6 +61,14 @@ const customerSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    otp: {
+      type: String,
+      required: false,
+    },
+    otpExpiration: {
+      type: Date,
+      required: false,
+    },
   },
   { timestamps: true }
 );
