@@ -138,15 +138,15 @@ export const sendOtp = async (req, res, next) => {
 };
 
 export const verifyOtpAndResetPassword = async (req, res, next) => {
-  const { email, otp, newPassword } = req.body;
+  const { email, otp, Password } = req.body;
 
   if (
     !email ||
     !otp ||
-    !newPassword ||
+    !Password ||
     email === "" ||
     otp === "" ||
-    newPassword === ""
+    Password === ""
   ) {
     return next(errorHandler(400, "All fields are required"));
   }
@@ -161,7 +161,7 @@ export const verifyOtpAndResetPassword = async (req, res, next) => {
       return next(errorHandler(400, "Invalid or expired OTP"));
     }
 
-    const hashedPassword = bcryptjs.hashSync(newPassword, 10);
+    const hashedPassword = bcryptjs.hashSync(Password, 10);
 
     user.password = hashedPassword;
     user.otp = null;
