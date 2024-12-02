@@ -98,7 +98,7 @@ export const sendOtp = async (req, res, next) => {
       return next(errorHandler(404, "User not found"));
     }
 
-    const otp = crypto.randomInt(100000, 999999).toString();
+    const otp = crypto.randomInt(1000, 9999).toString();
     const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
 
     user.otp = otp;
