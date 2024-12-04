@@ -175,54 +175,54 @@ export const verifyOtpAndResetPassword = async (req, res, next) => {
 };
 
 // Export the google function so it can be used in other files
-export const google = async (req, res, next) => {
-  // Destructure email, name, and googlePhotoUrl from the request body
-  const { email, name, googlePhotoUrl } = req.body;
+// export const google = async (req, res, next) => {
+//   // Destructure email, name, and googlePhotoUrl from the request body
+//   const { email, name, googlePhotoUrl } = req.body;
 
-  try {
-    // Find a user with the provided email
-    const user = await User.findOne({ email });
-    if (user) {
-      // If the user exists, generate a JWT token with the user's ID and isAdmin status
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      // Destructure the password out of the user object to exclude it from the response
-      const { password, ...rest } = user._doc;
+//   try {
+//     // Find a user with the provided email
+//     const user = await User.findOne({ email });
+//     if (user) {
+//       // If the user exists, generate a JWT token with the user's ID and isAdmin status
+//       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+//       // Destructure the password out of the user object to exclude it from the response
+//       const { password, ...rest } = user._doc;
 
-      res.status(200).json({ ...rest, token });
-    } else {
-      // If the user does not exist, generate a random password
-      const generatedPassword =
-        Math.random().toString(36).slice(-8) +
-        Math.random().toString(36).slice(-8);
+//       res.status(200).json({ ...rest, token });
+//     } else {
+//       // If the user does not exist, generate a random password
+//       const generatedPassword =
+//         Math.random().toString(36).slice(-8) +
+//         Math.random().toString(36).slice(-8);
 
-      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+//       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
 
-      const newUser = new User({
-        username:
-          name.toLowerCase().split(" ").join("") +
-          Math.random().toString(9).slice(-4),
-        email,
-        password: hashedPassword,
-        profilePicture: googlePhotoUrl,
-      });
+//       const newUser = new User({
+//         username:
+//           name.toLowerCase().split(" ").join("") +
+//           Math.random().toString(9).slice(-4),
+//         email,
+//         password: hashedPassword,
+//         profilePicture: googlePhotoUrl,
+//       });
 
-      await newUser.save();
+//       await newUser.save();
 
-      // Generate a JWT token with the new user's ID and isAdmin status
-      const token = jwt.sign(
-        { id: user._id, isAdmin: user.isAdmin },
-        process.env.JWT_SECRET
-      );
+//       // Generate a JWT token with the new user's ID and isAdmin status
+//       const token = jwt.sign(
+//         { id: user._id, isAdmin: user.isAdmin },
+//         process.env.JWT_SECRET
+//       );
 
-      const { password, ...rest } = newUser._doc;
+//       const { password, ...rest } = newUser._doc;
 
-      res.status(200).json({ ...rest, token });
-    }
-  } catch (error) {
-    // If an error occurs, pass the error to the next middleware
-    next(error);
-  }
-};
+//       res.status(200).json({ ...rest, token });
+//     }
+//   } catch (error) {
+//     // If an error occurs, pass the error to the next middleware
+//     next(error);
+//   }
+// };
 
 export const getUserProfile = async (req, res, next) => {
   try {
@@ -238,5 +238,64 @@ export const getUserProfile = async (req, res, next) => {
   } catch (error) {
     console.error("Error retrieving the user profile", error);
     next(errorHandler(500, "Error retrieving the user profile"));
+  }
+};
+
+
+
+export const updateUserProfile = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const { username, email, password } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    // Check if the new email already exists in the database
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ email });
+      if (emailExists) {
+        return next(errorHandler(400, "Email already in use"));
+      }
+    }
+
+    // Check if the new username already exists in the database
+    if (username && username !== user.username) {
+      const usernameExists = await User.findOne({ username });
+      if (usernameExists) {
+        return next(errorHandler(400, "Username already in use"));
+      }
+    }
+
+    // Prepare the fields to update
+    const updates = {};
+    if (username) updates.username = username;
+    if (email) updates.email = email;
+    if (password) updates.password = bcryptjs.hashSync(password, 10);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updates },
+      { new: true }
+    );
+
+    // Generate a new token after updating the user
+    const token = jwt.sign(
+      {
+        id: updatedUser._id,
+      },
+      process.env.JWT_SECRET, // Make sure to replace this with your secret key
+      { expiresIn: "1h" }
+    );
+
+    // Destructure the password out of the updated user object to exclude it from the response
+    const { password: pass, ...rest } = updatedUser._doc;
+
+    // Send the updated user details, including the token
+    res.status(200).json({ ...rest, token });
+  } catch (error) {
+    next(error);
   }
 };
