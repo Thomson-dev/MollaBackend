@@ -70,3 +70,30 @@ export const getAddresses = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const deleteAddress = async (req, res, next) => {
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    const addressIndex = user.addresses.findIndex(address => address._id.toString() === addressId);
+
+    if (addressIndex === -1) {
+      return next(errorHandler(404, "Address not found"));
+    }
+
+    user.addresses.splice(addressIndex, 1);
+    await user.save();
+
+    res.status(200).json({ message: "Address deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
