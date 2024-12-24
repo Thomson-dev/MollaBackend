@@ -73,11 +73,11 @@ export const getAddresses = async (req, res, next) => {
 
 
 export const deleteAddress = async (req, res, next) => {
-  const userId = req.params.userId;
   const addressId = req.params.addressId;
 
   try {
-    const user = await User.findById(userId);
+    // Find the user who has the address with the given address ID
+    const user = await User.findOne({ 'addresses._id': addressId });
 
     if (!user) {
       return next(errorHandler(404, "User not found"));
