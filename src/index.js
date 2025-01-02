@@ -24,8 +24,8 @@ app.use(cors());
 // Middleware to parse JSON requests
 app.use(express.json());
 
-// Apply maintenance mode middleware to all routes
-app.use(maintenanceMode);
+// // Apply maintenance mode middleware to all routes
+// app.use(maintenanceMode);
 
 // Root route
 app.get("/", (req, res) => {
