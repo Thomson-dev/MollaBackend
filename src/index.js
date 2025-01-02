@@ -7,7 +7,7 @@ import productRoute from "./routes/productRoute.js";
 import addressRoute from "./routes/addressRoute.js";
 import orderRoute from "./routes/orderRoutes.js";
 import { createPaymentIntent } from "./controllers/stripeController.js";
-import { maintenanceMode } from './utils/maintainace.js'
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -24,8 +24,7 @@ app.use(cors());
 // Middleware to parse JSON requests
 app.use(express.json());
 
-// // Apply maintenance mode middleware to all routes
-// app.use(maintenanceMode);
+
 
 // Root route
 app.get("/", (req, res) => {
